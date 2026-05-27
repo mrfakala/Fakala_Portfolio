@@ -17,9 +17,10 @@
             --menu-bg: #111111;
             --accent: #ffffff;
             --text-color: #e6e6e6; 
-            --text-highlight: #ffffff; 
             --box-color: #e5e5e5; 
             --orange-brand: #ff6b00;
+            --showroom-bg: #f5f5f7;
+            --showroom-text: #1d1d1f;
         }
 
         body {
@@ -30,17 +31,76 @@
             line-height: 1.7;
             font-size: 17px;
             font-weight: 300;
+            transition: background-color 0.6s ease, color 0.6s ease;
+        }
+
+        body.showroom-active {
+            background-color: var(--showroom-bg);
+            color: var(--showroom-text);
         }
 
         a { text-decoration: none; color: inherit; transition: 0.3s; }
         ul { list-style: none; }
 
-        /* --- HAMBURGER MENU & ARROW ANIMATION --- */
-        .menu-toggle {
+        /* --- AI ÇEVİRİ UYARI MODALI --- */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.8);
+            display: none; 
+            align-items: center; justify-content: center;
+            z-index: 3000;
+            opacity: 0; transition: opacity 0.3s ease;
+        }
+        .modal-content {
+            background: #111; color: #fff;
+            padding: 30px; border-radius: 8px;
+            max-width: 450px; text-align: center;
+            border: 1px solid var(--orange-brand);
+            font-family: 'Jost', sans-serif;
+            transform: translateY(-20px); transition: transform 0.3s ease;
+            margin: 20px;
+        }
+        body.showroom-active .modal-content {
+            background: #fff; color: #111; border-color: #ccc;
+        }
+        .modal-content p {
+            margin-bottom: 25px; 
+            font-size: 1.1rem; 
+            font-style: italic;
+            line-height: 1.6;
+        }
+        .modal-content button {
+            background: var(--orange-brand); color: #fff;
+            border: none; padding: 10px 30px; border-radius: 4px;
+            cursor: pointer; font-size: 1rem; font-weight: 500;
+            transition: background 0.3s;
+        }
+        .modal-content button:hover {
+            background: #e65c00;
+        }
+
+        /* --- ÜST BAR (MENU TEXT & LANG) --- */
+        .top-bar {
             position: fixed;
             top: 30px;
             left: 30px;
+            right: 40px;
             z-index: 2000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            pointer-events: none; 
+        }
+
+        .menu-left-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            pointer-events: auto; 
+        }
+
+        .menu-toggle {
             background: none;
             border: none;
             cursor: pointer;
@@ -56,42 +116,87 @@
             transition: 0.4s;
         }
 
-        .menu-toggle.open .bar:nth-child(1) { transform: rotate(45deg) translate(5px, 6px); }
-        .menu-toggle.open .bar:nth-child(2) { opacity: 0; }
-        .menu-toggle.open .bar:nth-child(3) { transform: rotate(-45deg) translate(5px, -6px); }
-
-        .menu-arrow-anim {
-            position: fixed;
-            top: 32px;
-            left: 80px;
-            color: var(--orange-brand);
-            font-size: 1.6rem;
-            z-index: 1999;
-            animation: pointToMenu 1s infinite;
-            font-weight: 500;
+        body.showroom-active .bar {
+            background-color: #000; 
+        }
+        body.showroom-active .menu-text {
+            color: #000;
         }
 
-        @keyframes pointToMenu {
-            0%, 100% { transform: translateX(0); }
-            50% { transform: translateX(-15px); }
+        .menu-toggle.open .bar:nth-child(1) { transform: rotate(45deg) translate(5px, 6px); background-color: #fff;}
+        .menu-toggle.open .bar:nth-child(2) { opacity: 0; }
+        .menu-toggle.open .bar:nth-child(3) { transform: rotate(-45deg) translate(5px, -6px); background-color: #fff;}
+
+        .menu-text {
+            font-family: 'Jost', sans-serif;
+            font-size: 1rem;
+            letter-spacing: 2px;
+            font-weight: 500;
+            color: #fff;
+            transition: color 0.4s;
+        }
+
+        .lang-selector {
+            display: flex;
+            gap: 10px;
+            pointer-events: auto;
+        }
+
+        .lang-btn {
+            background: none;
+            border: 1px solid #555;
+            color: #aaa;
+            padding: 4px 10px;
+            font-family: 'Jost', sans-serif;
+            font-size: 0.8rem;
+            font-weight: 500;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+
+        .lang-btn:hover {
+            border-color: var(--orange-brand);
+            color: var(--accent);
+        }
+
+        .lang-btn.active {
+            background-color: var(--orange-brand);
+            border-color: var(--orange-brand);
+            color: #fff;
+        }
+
+        body.showroom-active .lang-btn {
+            border-color: #ccc;
+            color: #666;
+        }
+        body.showroom-active .lang-btn:hover {
+            border-color: var(--orange-brand);
+            color: #000;
+        }
+        body.showroom-active .lang-btn.active {
+            background-color: var(--orange-brand);
+            color: #fff;
+            border-color: var(--orange-brand);
         }
 
         /* --- SIDEBAR MENÜ --- */
         aside {
             position: fixed;
             top: 0;
-            left: -350px;
-            width: 340px;
+            left: -380px;
+            width: 360px;
             height: 100vh;
             background: var(--menu-bg);
             border-right: 1px solid #222;
-            padding: 90px 40px 40px 40px;
+            padding: 90px 30px 40px 30px;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
             transition: left 0.6s cubic-bezier(0.22, 1, 0.36, 1);
             z-index: 1500;
             box-shadow: 10px 0 30px rgba(0,0,0,0.6);
+            overflow-y: auto;
         }
 
         aside.active { left: 0; }
@@ -102,14 +207,14 @@
             font-weight: 600;
             letter-spacing: 3px;
             text-transform: uppercase;
-            margin-bottom: 40px;
+            margin-bottom: 30px;
             color: #fff;
             text-align: center;
         }
 
-        .nav-links li { margin-bottom: 15px; }
+        .nav-links li { margin-bottom: 12px; }
 
-        .nav-links button {
+        .nav-links > li > button {
             background-color: var(--box-color);
             color: #000;
             border: none;
@@ -126,12 +231,22 @@
             transition: all 0.4s ease;
         }
 
-        .nav-links button:hover, .nav-links button.active {
+        .nav-links > li > button:hover {
             background-color: #fff;
             transform: translateY(-2px);
             box-shadow: 0 5px 15px rgba(255,255,255,0.1);
         }
 
+        /* Showroom Menü Rengi */
+        .nav-links .showroom-menu-btn {
+            background-color: var(--orange-brand) !important;
+            color: #fff !important;
+        }
+        .nav-links .showroom-menu-btn:hover {
+            background-color: #ff8533 !important;
+        }
+
+        /* Elaborate & Nested Submenus */
         .submenu {
             display: none;
             margin-top: 8px;
@@ -144,17 +259,22 @@
             color: #aaa;
             text-transform: none;
             font-family: 'Jost', sans-serif;
-            font-size: 0.85rem;
-            border-bottom: none;
-            padding: 8px 0;
+            font-size: 0.9rem;
+            border: none;
+            padding: 8px 15px;
             text-align: left;
-            padding-left: 15px;
+            width: 100%;
+            cursor: pointer;
+            transition: 0.3s;
         }
         .submenu button:hover {
-            background: transparent;
             color: #fff;
             transform: translateX(5px);
-            box-shadow: none;
+        }
+
+        .nested-submenu {
+            border-left: 1px dashed #444;
+            margin-left: 15px;
         }
 
         .socials {
@@ -165,26 +285,16 @@
             opacity: 0.7;
         }
         
-        .socials svg {
-            width: 22px;
-            height: 22px;
-            fill: #fff;
-            transition: fill 0.3s, transform 0.3s;
-        }
+        .socials svg { width: 22px; height: 22px; fill: #fff; transition: fill 0.3s, transform 0.3s; }
         .socials a:hover svg { transform: scale(1.2); fill: #fff; opacity: 1; }
 
         /* --- ANA İÇERİK --- */
-        main {
-            width: 100%;
-            min-height: 100vh;
-            position: relative;
-        }
+        main { width: 100%; min-height: 100vh; position: relative; }
 
         .page-section {
             display: none;
             opacity: 0;
             transition: opacity 0.6s ease;
-            background-color: var(--bg-color); 
             width: 100%; 
             position: absolute; 
             top: 0;
@@ -201,18 +311,14 @@
             z-index: 10;
         }
         
-        #home.active {
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-        }
+        #home.active { display: flex; flex-direction: column; min-height: 100vh; }
 
         /* --- HOMEPAGE DÜZENİ --- */
         .hero-text-area {
             flex: 0 0 auto;
             padding: 120px 20px 60px 20px;
             text-align: center;
-            background: #0c0c0c;
+            background: transparent;
         }
 
         .hero-text-area h1 {
@@ -257,11 +363,7 @@
         }
 
         /* --- GENEL CONTENT WRAPPER --- */
-        .content-wrapper {
-            padding: 140px 60px 80px 60px;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
+        .content-wrapper { padding: 140px 60px 80px 60px; max-width: 1200px; margin: 0 auto; }
         
         .content-wrapper h2 {
             font-family: 'Jost', sans-serif;
@@ -271,19 +373,13 @@
             margin-bottom: 60px;
             border-bottom: 1px solid #333;
             padding-bottom: 20px;
-            color: #fff;
+            color: inherit;
             letter-spacing: 1px;
         }
 
         /* --- SPLIT LAYOUT --- */
-        .split-layout {
-            display: flex;
-            gap: 60px;
-            align-items: flex-start;
-        }
-
+        .split-layout { display: flex; gap: 60px; align-items: flex-start; }
         .text-column { flex: 1; }
-
         .image-column {
             flex: 0 0 500px;
             display: flex;
@@ -292,27 +388,19 @@
             gap: 40px;
             position: relative;
         }
-
-        .image-column.sticky-image {
-            position: sticky;
-            top: 100px; 
-            height: fit-content;
-        }
+        .image-column.sticky-image { position: sticky; top: 100px; height: fit-content; }
 
         .text-content p {
             font-family: 'Jost', sans-serif;
             margin-bottom: 30px;
             font-size: 1.15rem; 
             line-height: 1.8;
-            color: var(--text-color);
+            color: inherit;
             text-align: justify;
             font-weight: 300;
         }
 
-        .highlight {
-            color: #ffffff; 
-            font-weight: 500;
-        }
+        .highlight { color: var(--orange-brand); font-weight: 500; }
 
         .analog-photo {
             width: 100%;
@@ -344,38 +432,132 @@
             gap: 20px;
         }
 
-        /* --- VIDEO ARCHIVE & MEDIA GRID --- */
-        .video-archive-section {
-            margin-top: 100px;
-            padding-top: 60px;
-            border-top: 1px solid #222;
+        /* --- SHOWROOM ÖZEL TASARIM --- */
+        #showroom h2 { border-bottom: 1px solid #ddd; }
+        
+        .showroom-panel {
+            background-color: #fff;
+            border-radius: 12px;
+            padding: 50px;
+            margin-bottom: 60px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            border: 1px solid #eaeaea;
         }
+
+        .showroom-panel h3 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+            font-weight: 400;
+            color: #111;
+            letter-spacing: 0.5px;
+        }
+
+        .showroom-panel p {
+            color: #444;
+            font-size: 1.1rem;
+            line-height: 1.8;
+            margin-bottom: 30px;
+        }
+
+        .showroom-link {
+            display: inline-block;
+            color: var(--orange-brand);
+            font-weight: 500;
+            margin-bottom: 30px;
+            text-decoration: none;
+            border-bottom: 1px solid transparent;
+            transition: 0.3s;
+        }
+        .showroom-link:hover { border-bottom: 1px solid var(--orange-brand); }
+
+        .iframe-container {
+            position: relative;
+            width: 100%;
+            padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
+            height: 0;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        .iframe-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+
+        .skill-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 30px;
+            padding-top: 25px;
+            border-top: 1px solid #eee;
+        }
+
+        .tag {
+            background: #f0f0f0;
+            color: #555;
+            padding: 6px 14px;
+            border-radius: 30px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+        }
+
+        .panel-image {
+            width: 100%;
+            border-radius: 8px;
+            object-fit: cover;
+            border: 1px solid #eee;
+        }
+
+        /* %50 Boyutlu ve Ortalı Görseller İçin Özel Sınıf */
+        .half-size-img {
+            width: 50% !important;
+            margin: 0 auto;
+            display: block;
+            transition: transform 0.3s;
+        }
+        .half-size-img:hover {
+            transform: scale(1.05);
+        }
+
+        /* --- VIDEO ARCHIVE & MEDIA GRID --- */
+        .video-archive-section { margin-top: 100px; padding-top: 60px; border-top: 1px solid #222; }
+        body.showroom-active .video-archive-section { border-color: #ddd; }
 
         .video-category-title {
             font-family: 'Jost', sans-serif;
             font-size: 1.8rem;
             font-weight: 400;
-            color: #fff;
+            color: inherit;
             text-transform: uppercase;
             letter-spacing: 2px;
             margin-bottom: 40px;
             text-align: center;
-            border-bottom: 1px dashed #333;
+            border-bottom: 1px dashed #555;
             padding-bottom: 10px;
             display: inline-block;
         }
         
-        .video-center-wrapper {
-            text-align: center;
-            margin-bottom: 60px;
-        }
+        .video-center-wrapper { text-align: center; margin-bottom: 60px; }
 
-        .video-grid {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 25px;
-            justify-content: center;
-        }
+        .video-grid { display: flex; flex-wrap: wrap; gap: 25px; justify-content: center; }
 
         .video-item {
             background: #000;
@@ -384,34 +566,14 @@
             box-shadow: 0 10px 20px rgba(0,0,0,0.5);
             transition: transform 0.3s;
         }
+        body.showroom-active .video-item { border-color: #ddd; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
 
-        .video-item:hover {
-            transform: translateY(-5px);
-            border-color: #fff;
-        }
+        .video-item:hover { transform: translateY(-5px); border-color: var(--orange-brand); }
 
         /* --- MEDIA (MASONRY) GRID --- */
-        .highlights-grid {
-            column-count: 2; 
-            column-gap: 40px;
-            max-width: 1000px;
-            margin: 0 auto;
-        }
-
-        .highlight-item {
-            break-inside: avoid;
-            margin-bottom: 40px;
-            background: transparent;
-            display: flex;
-            justify-content: center;
-        }
-
-        .highlight-item.yt-container {
-            background: #000;
-            padding: 10px;
-            border: 1px solid #333;
-            width: 100%;
-        }
+        .highlights-grid { column-count: 2; column-gap: 40px; max-width: 1000px; margin: 0 auto; }
+        .highlight-item { break-inside: avoid; margin-bottom: 40px; background: transparent; display: flex; justify-content: center; }
+        .highlight-item.yt-container { background: #000; padding: 10px; border: 1px solid #333; width: 100%; }
 
         .follow-me-btn {
             display: inline-block;
@@ -425,11 +587,7 @@
             transition: all 0.3s;
         }
 
-        .follow-me-btn:hover {
-            background: var(--orange-brand);
-            color: #000;
-            transform: translateY(-5px);
-        }
+        .follow-me-btn:hover { background: var(--orange-brand); color: #000; transform: translateY(-5px); }
 
         /* --- STUDIO LIST & CONTRIBUTIONS STYLE --- */
         .year-title {
@@ -441,115 +599,35 @@
             display: inline-block;
             font-weight: 400;
         }
+        body.showroom-active .year-title { border-color: #ccc; }
 
-        .track-item {
-            margin-bottom: 10px;
-            font-size: 1.1rem;
-            color: #bbb;
-        }
+        .track-item { margin-bottom: 10px; font-size: 1.1rem; color: #bbb; }
+        body.showroom-active .track-item { color: #555; }
 
-        .track-item a {
-            color: #fff;
-            text-decoration: none;
-            border-bottom: 1px dotted #444;
-            transition: all 0.3s;
-        }
-
-        .track-item a:hover {
-            color: var(--orange-brand);
-            border-color: var(--orange-brand);
-        }
+        .track-item a { color: inherit; text-decoration: none; border-bottom: 1px dotted #444; transition: all 0.3s; }
+        .track-item a:hover { color: var(--orange-brand); border-color: var(--orange-brand); }
 
         /* Contributions Specific */
-        .contribution-item { 
-            display: flex; 
-            align-items: center; 
-            gap: 25px; 
-            margin-bottom: 40px; 
-        }
-        .contribution-logo { 
-            width: 60px; 
-            height: 60px; 
-            object-fit: contain; 
-            border-radius: 8px; 
-            flex-shrink: 0;
-            background-color: #1a1a1a; 
-        }
-        .contribution-text {
-            display: flex;
-            flex-direction: column;
-        }
-        .contribution-title { 
-            font-size: 1.4rem; 
-            color: var(--orange-brand); 
-            margin-bottom: 5px; 
-            font-weight: 400; 
-            text-decoration: none;
-            transition: color 0.3s;
-        }
-        .contribution-title:hover {
-            color: #fff;
-            text-decoration: underline;
-        }
-        .contribution-desc { 
-            font-size: 1.1rem; 
-            color: #ccc; 
-        }
+        .contribution-item { display: flex; align-items: center; gap: 25px; margin-bottom: 40px; }
+        .contribution-logo { width: 60px; height: 60px; object-fit: contain; border-radius: 8px; flex-shrink: 0; background-color: #1a1a1a; }
+        .contribution-text { display: flex; flex-direction: column; }
+        .contribution-title { font-size: 1.4rem; color: var(--orange-brand); margin-bottom: 5px; font-weight: 400; text-decoration: none; transition: color 0.3s; }
+        .contribution-title:hover { color: inherit; text-decoration: underline; }
+        .contribution-desc { font-size: 1.1rem; color: #ccc; }
+        body.showroom-active .contribution-desc { color: #666; }
 
         /* --- LIVE SOUND PAGE --- */
-        .live-sound-intro {
-            font-size: 1.3rem;
-            color: #fff;
-            text-align: center;
-            margin-bottom: 50px;
-            font-weight: 300;
-            letter-spacing: 1px;
-            font-style: italic;
-        }
-
-        .live-sound-list {
-            text-align: center;
-            max-width: 900px;
-            margin: 0 auto;
-            line-height: 2.2;
-            font-size: 1.2rem;
-            color: #ccc;
-        }
-
-        .live-sound-list span {
-            display: inline-block;
-            margin: 0 8px;
-        }
-
-        .live-sound-list span::after {
-            content: "/";
-            margin-left: 16px;
-            color: var(--orange-brand);
-            font-weight: bold;
-        }
-
+        .live-sound-intro { font-size: 1.3rem; color: inherit; text-align: center; margin-bottom: 50px; font-weight: 300; letter-spacing: 1px; font-style: italic; }
+        .live-sound-list { text-align: center; max-width: 900px; margin: 0 auto; line-height: 2.2; font-size: 1.2rem; color: #ccc; }
+        body.showroom-active .live-sound-list { color: #444; }
+        .live-sound-list span { display: inline-block; margin: 0 8px; }
+        .live-sound-list span::after { content: "/"; margin-left: 16px; color: var(--orange-brand); font-weight: bold; }
         .live-sound-list span:last-child::after { content: ""; }
 
         /* --- CONTACT STYLES --- */
-        .contact-list {
-            display: flex;
-            flex-direction: column;
-            gap: 30px;
-            align-items: center;
-            margin-top: 50px;
-        }
-
-        .contact-link {
-            font-size: 1.5rem;
-            color: #fff;
-            border-bottom: 1px solid transparent;
-            padding-bottom: 5px;
-        }
-
-        .contact-link:hover {
-            color: var(--orange-brand);
-            border-bottom: 1px solid var(--orange-brand);
-        }
+        .contact-list { display: flex; flex-direction: column; gap: 30px; align-items: center; margin-top: 50px; }
+        .contact-link { font-size: 1.5rem; color: inherit; border-bottom: 1px solid transparent; padding-bottom: 5px; }
+        .contact-link:hover { color: var(--orange-brand); border-bottom: 1px solid var(--orange-brand); }
 
         /* MOBİL UYUM */
         @media (max-width: 950px) {
@@ -560,57 +638,81 @@
             .content-wrapper { padding: 100px 20px; }
             .image-column.sticky-image { position: static; }
             .highlights-grid { column-count: 1; }
+            .grid-2 { grid-template-columns: 1fr; }
+            .grid-3 { grid-template-columns: 1fr; } 
+            .top-bar { right: 20px; left: 20px; }
+            .half-size-img { width: 70% !important; } /* Mobilde çok küçük olmasın diye biraz büyütüyoruz */
         }
 
         @media (max-width: 600px) {
-            .contribution-item {
-                flex-direction: row; 
-                align-items: center;
-                gap: 15px;
-            }
+            .contribution-item { flex-direction: row; align-items: center; gap: 15px; }
+            .showroom-panel { padding: 30px 20px; }
         }
 
     </style>
 </head>
-<body>
+<body onload="initLang()">
 
-    <button class="menu-toggle" onclick="toggleMenu()">
-        <div class="bar"></div>
-        <div class="bar"></div>
-        <div class="bar"></div>
-    </button>
-    
-    <div id="menu-arrow" class="menu-arrow-anim">←</div>
+    <!-- DİL UYARI MODALI -->
+    <div id="langModalOverlay" class="modal-overlay">
+        <div class="modal-content">
+            <p id="langModalText"></p>
+            <button onclick="closeLangModal()" id="langModalBtn">OK</button>
+        </div>
+    </div>
+
+    <div class="top-bar">
+        <div class="menu-left-container">
+            <button class="menu-toggle" onclick="toggleMenu()">
+                <div class="bar"></div>
+                <div class="bar"></div>
+                <div class="bar"></div>
+            </button>
+            <span class="menu-text" data-i18n="menu_text">MENU</span>
+        </div>
+        
+        <div class="lang-selector">
+            <button class="lang-btn active" onclick="changeLang('en')" id="btn-en">EN</button>
+            <button class="lang-btn" onclick="changeLang('tr')" id="btn-tr">TR</button>
+            <button class="lang-btn" onclick="changeLang('es')" id="btn-es">ES</button>
+            <button class="lang-btn" onclick="changeLang('de')" id="btn-de">DE</button>
+        </div>
+    </div>
 
     <aside id="sidebar">
         <div class="brand">FAKALA</div>
         
         <ul class="nav-links">
-            <li><button onclick="goTo('home')">Homepage</button></li>
-            <li><button onclick="goTo('musician')">Fakala as a musician</button></li>
+            <li><button onclick="goTo('home')" data-i18n="nav_home">Homepage</button></li>
+            <li><button onclick="goTo('showroom')" class="showroom-menu-btn" data-i18n="nav_showroom">Showroom</button></li>
             
             <li>
-                <button onclick="toggleSubmenu('tech-submenu')">Fakala in sound tech ▾</button>
-                <div class="submenu" id="tech-submenu">
-                    <button onclick="goTo('studio')">- Fakala In Studio</button>
-                    <button onclick="goTo('media')">- Media</button>
-                    <button onclick="goTo('livesound')">- Live Sound</button>
-                    <button onclick="goTo('contributions')">- Contributions</button>
+                <button onclick="toggleSubmenu('elaborate-submenu', event)" data-i18n="nav_elaborate">Elaborate ▾</button>
+                <div class="submenu" id="elaborate-submenu">
+                    <button onclick="goTo('musician')" data-i18n="nav_musician">- Fakala as a Musician</button>
+                    
+                    <!-- İç İçe Submenu: Tech -->
+                    <button onclick="toggleSubmenu('tech-submenu', event)" data-i18n="nav_tech">- Fakala in Sound Tech ▾</button>
+                    <div class="submenu nested-submenu" id="tech-submenu">
+                        <button onclick="goTo('studio')" data-i18n="nav_studio">-- Fakala in Studio</button>
+                        <button onclick="goTo('media')" data-i18n="nav_media">-- Media</button>
+                        <button onclick="goTo('livesound')" data-i18n="nav_livesound">-- Live Sound</button>
+                        <button onclick="goTo('contributions')" data-i18n="nav_contributions">-- Contributions</button>
+                    </div>
+
+                    <button onclick="goTo('instrumentalist')" data-i18n="nav_instrumentalist">- Fakala as an Instrumentalist</button>
+                    <button onclick="goTo('composer')" data-i18n="nav_composer">- Fakala as a Composer</button>
+                    
+                    <!-- İç İçe Submenu: Projects -->
+                    <button onclick="toggleSubmenu('projects-submenu', event)" data-i18n="nav_projects">- Fakala's Projects ▾</button>
+                    <div class="submenu nested-submenu" id="projects-submenu">
+                        <button onclick="goTo('hikaye')" data-i18n="nav_hikaye">-- The Hikaye Project</button>
+                        <button onclick="goTo('dogac')" data-i18n="nav_dogac">-- Doğaç Müzik</button>
+                    </div>
                 </div>
             </li>
             
-            <li><button onclick="goTo('instrumentalist')">Fakala as an instrumentalist</button></li>
-            <li><button onclick="goTo('composer')">Fakala as a Composer</button></li>
-            
-            <li>
-                <button onclick="toggleSubmenu('projects-submenu')">Fakala's Projects ▾</button>
-                <div class="submenu" id="projects-submenu">
-                    <button onclick="goTo('hikaye')">- The Hikaye Project</button>
-                    <button onclick="goTo('dogac')">- Doğaç Müzik</button>
-                </div>
-            </li>
-            
-            <li><button onclick="goTo('contact')">Contact</button></li>
+            <li><button onclick="goTo('contact')" data-i18n="nav_contact">Contact</button></li>
         </ul>
 
         <div class="socials">
@@ -630,27 +732,110 @@
         
         <section id="home" class="page-section active">
             <div class="hero-text-area">
-                <h1>WELCOME</h1>
-                <p>This is a portfolio of Fakala (Taylan Yıldırır)</p>
+                <h1 data-i18n="home_title">WELCOME</h1>
+                <p data-i18n="home_desc">This is a portfolio of Fakala (Taylan Yıldırır)</p>
             </div>
             <div class="hero-image-container">
                 <img src="taylan.jpg" alt="Fakala Portrait" class="homepage-analog">
             </div>
         </section>
 
+        <!-- SHOWROOM BÖLÜMÜ -->
+        <section id="showroom" class="page-section content-wrapper">
+            <h2 data-i18n="nav_showroom">SHOWROOM</h2>
+
+            <!-- Panel 1 (Başlık güncellendi) -->
+            <div class="showroom-panel">
+                <h3 data-i18n="sh_p1_title">The Project "Fakala"</h3>
+                <p data-i18n="sh_p1_desc">I would like to introduce my Musician career as my primary audio job. I composed, recorded, performed (most of the instruments), produced, mixed and mastered for all of my Fakala career.</p>
+                <a href="javascript:void(0)" onclick="goTo('musician')" class="showroom-link" data-i18n="sh_p1_link">(More detailed information is available on the "Fakala as a Musician" page.)</a>
+                
+                <div class="grid-3">
+                    <div class="iframe-container"><iframe src="https://www.youtube.com/embed/2mJk3Jy1oHU?si=BPRbcqHt94h2mXnx" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe></div>
+                    <div class="iframe-container"><iframe src="https://www.youtube.com/embed/-yn2zAUlhUY?si=49YsAItVkPUKPucH" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe></div>
+                    <div class="iframe-container"><iframe src="https://www.youtube.com/embed/IeMibrUV7Ts?si=iecc6m3be6KT16t_" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe></div>
+                </div>
+
+                <div class="skill-tags">
+                    <span class="tag">Composing</span><span class="tag">Music Production</span><span class="tag">Vocal Production</span><span class="tag">Singing</span><span class="tag">Guitar</span><span class="tag">Bass Guitar</span><span class="tag">Keyboards</span><span class="tag">Synthesizers</span><span class="tag">Sound Design</span><span class="tag">Music Recording</span><span class="tag">Live Recording</span><span class="tag">Music Mixing</span><span class="tag">Music Mastering</span><span class="tag">Indie</span><span class="tag">Jazz</span><span class="tag">Pop</span><span class="tag">Live Performance</span><span class="tag">Writing Lyrics</span>
+                </div>
+            </div>
+
+            <!-- Panel 2 -->
+            <div class="showroom-panel">
+                <h3>Çağrı Sinci - Kreşendo</h3>
+                <p data-i18n="sh_p2_desc">This is a piece source of pride for me. I used to listen Çağrı Sinci when I was a high school student. Now I have produced one of his track from his EP "Çiçek Böcek" also in LP "Klasik".</p>
+                <div class="iframe-container">
+                    <iframe src="https://www.youtube.com/embed/iNHjSrajxGI?si=4j38sbTCFk5PtZeI" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                </div>
+                <div class="skill-tags">
+                    <span class="tag">Music Production</span><span class="tag">Vocal Production</span><span class="tag">Synthesizers</span><span class="tag">Sound Design</span><span class="tag">Electronic Music</span><span class="tag">Hip-hop</span>
+                </div>
+            </div>
+
+            <!-- Panel 3 (Başlık ve Açıklama güncellendi) -->
+            <div class="showroom-panel">
+                <h3 data-i18n="sh_p3_title">Soundtrack for the game "Sagas of Lumin"</h3>
+                <p data-i18n="sh_p3_desc">I’m beyond thrilled to say that I contributed to this magical world by composing two original tracks for the game that you can ride dragons! Watching the trailer in the Future Games Show alongside so many great titles was a great moment.</p>
+                <div class="grid-2">
+                    <div class="iframe-container"><iframe src="https://www.youtube.com/embed/kqwFFh346Ig?si=311wqsq2clu9SKgE" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe></div>
+                    <div class="iframe-container"><iframe src="https://www.youtube.com/embed/phkRcmJ70Zo?si=j4fbs0xt2LinehpE" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe></div>
+                </div>
+                <div class="skill-tags">
+                    <span class="tag">Composing</span><span class="tag">Soundtrack</span><span class="tag">Guitar</span><span class="tag">Flute</span><span class="tag">Synthesizer</span><span class="tag">Sound Design</span><span class="tag">Music Recording</span><span class="tag">Music Mixing</span><span class="tag">Music Mastering</span><span class="tag">Music Production</span><span class="tag">Medieval Music</span><span class="tag">Middle Earth Music</span><span class="tag">Cinematic Music</span>
+                </div>
+            </div>
+
+            <!-- Panel 4 -->
+            <div class="showroom-panel">
+                <h3>Mert Ersoy - Dört Duvar & Bir İleri İki Geri</h3>
+                <p data-i18n="sh_p4_desc">The song that I produced "Dört Duvar" by Mert Ersoy was streamed around 70k on YouTube in first the week! And his second single “Bir İleri İki Geri” is also produced by me.</p>
+                
+                <div class="grid-2">
+                    <div class="iframe-container">
+                        <iframe src="https://www.youtube.com/embed/8UqS8JgaWGI?si=r3cvGscAv0-WXqRJ" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                    </div>
+                    <div class="iframe-container">
+                        <iframe src="https://www.youtube.com/embed/wkaAU105rh0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                    </div>
+                </div>
+
+                <div class="skill-tags">
+                    <span class="tag">Composing</span><span class="tag">Arrangement</span><span class="tag">Music Production</span><span class="tag">Vocal Production</span><span class="tag">Guitar</span><span class="tag">Bass Guitar</span><span class="tag">Keyboards</span><span class="tag">Synthesizers</span><span class="tag">Music Recording</span><span class="tag">Music Mixing</span><span class="tag">Music Mastering</span>
+                </div>
+            </div>
+
+            <!-- Panel 5 (Fotoğraflar boyutlandırıldı ve linklendi) -->
+            <div class="showroom-panel">
+                <h3 data-i18n="sh_p5_title">AI & Data Projects</h3>
+                <p data-i18n="sh_p5_desc">Completing AI training tasks like audio annotation and QA for xAI and annotating music with emotional, cultural and musical data for BeatpulseLabs</p>
+                <div class="grid-2">
+                    <a href="https://x.ai" target="_blank" style="text-decoration: none;">
+                        <img src="8.jpg" alt="xAI" class="panel-image half-size-img">
+                    </a>
+                    <a href="https://beatpulselabs.com" target="_blank" style="text-decoration: none;">
+                        <img src="1.jpg" alt="BeatPulseLabs" class="panel-image half-size-img">
+                    </a>
+                </div>
+                <div class="skill-tags">
+                    <span class="tag">Data Annotation</span><span class="tag">Critical Listening</span><span class="tag">Audio and Music Technology</span><span class="tag">Music Theory</span><span class="tag">Musicology</span><span class="tag">English</span><span class="tag">Turkish</span><span class="tag">Communication Skills</span><span class="tag">Video Editing</span>
+                </div>
+            </div>
+        </section>
+
         <section id="musician" class="page-section content-wrapper">
-            <h2>FAKALA AS A MUSICIAN</h2>
+            <h2 data-i18n="nav_musician_header">FAKALA AS A MUSICIAN</h2>
             <div class="split-layout">
                 <div class="text-column">
                     <div class="text-content">
                         <p>
-                            In 2022, made his debut on digital music platforms with his work <span class="highlight">"Denge"</span>. This work strongly demonstrates Fakala's storytelling side. In 2022, he released an album called <span class="highlight">"Enteresantel"</span> which conveyed his music learning process and the confusing problems of a teenager. Released 2 singles titled "Yanımda Ol" and "AMA BEN SİKTİR ETMEK İSTEMİYORUMM!!".
+                            <span data-i18n="musician_p1">In 2022, made his debut on digital music platforms with his work</span> <span class="highlight">"Denge"</span>. <span data-i18n="musician_p1_2">This work strongly demonstrates Fakala's storytelling side. In 2022, he released an album called</span> <span class="highlight">"Enteresantel"</span> <span data-i18n="musician_p1_3">which conveyed his music learning process and the confusing problems of a teenager. Released 2 singles titled "Yanımda Ol" and "AMA BEN SİKTİR ETMEK İSTEMİYORUMM!!".</span>
                         </p>
                         <p>
-                            In 2023, released a single "Hayat Boktan". In 2024, released two singles "Tinnitus" and "Gözlerini Kapat ve Sus". <span class="highlight">"Tinnitus"</span> was listened to more than 20,000 times on Spotify within 2 months. On May 31, 2024, "En Güzel İlhamlar", the first piece from his album <span class="highlight">"Karanlık Sancıyı Aydınlatıyor"</span>, was pre released. The track entered the Spotify "Fresh Finds Türkiye" list at number one. The track from this album "Teşhis" has reached more than 40,000 listens on Spotify.
+                            <span data-i18n="musician_p2">In 2023, released a single "Hayat Boktan". In 2024, released two singles "Tinnitus" and "Gözlerini Kapat ve Sus".</span> <span class="highlight">"Tinnitus"</span> <span data-i18n="musician_p2_2">was listened to more than 20,000 times on Spotify within 2 months. On May 31, 2024, "En Güzel İlhamlar", the first piece from his album</span> <span class="highlight">"Karanlık Sancıyı Aydınlatıyor"</span>, <span data-i18n="musician_p2_3">was pre released. The track entered the Spotify "Fresh Finds Türkiye" list at number one. The track from this album "Teşhis" has reached more than 40,000 listens on Spotify.</span>
                         </p>
                         <p>
-                            Performed as Fakala. Some of them has videos on Youtube. After the Album <span class="highlight">"Karanlık Sancıyı Aydınlatıyor"</span> has released, 4 different internet magazines (Rotka, BBI, Müzik Ekspres, Beatsommelier) has published an article about “Fakala”. The song “En Güzel İlhamlar” from this album has stayed on the first place of <span class="highlight">“Fresh Finds Türkiye”</span> editorial list for a month. Directed and published 3 music videos as “Fakala”.
+                            <span data-i18n="musician_p3">Performed as Fakala. Some of them has videos on Youtube. After the Album</span> <span class="highlight">"Karanlık Sancıyı Aydınlatıyor"</span> <span data-i18n="musician_p3_2">has released, 4 different internet magazines (Rotka, BBI, Müzik Ekspres, Beatsommelier) has published an article about “Fakala”. The song “En Güzel İlhamlar” from this album has stayed on the first place of</span> <span class="highlight">“Fresh Finds Türkiye”</span> <span data-i18n="musician_p3_3">editorial list for a month. Directed and published 3 music videos as “Fakala”.</span>
                         </p>
                     </div>
                     <div class="linktree-container">
@@ -671,14 +856,15 @@
                 </div>
             </div>
             <div class="video-archive-section">
-                <div class="video-center-wrapper"><span class="video-category-title">Music Videos</span></div>
+                <div class="video-center-wrapper"><span class="video-category-title" data-i18n="music_videos">Music Videos</span></div>
                 <div class="video-grid">
+                    <div class="video-item"><iframe width="280" height="157" src="https://www.youtube.com/embed/-yn2zAUlhUY?si=49YsAItVkPUKPucH" frameborder="0" allowfullscreen></iframe></div>
                     <div class="video-item"><iframe width="280" height="157" src="https://www.youtube.com/embed/UHEeRl5Fkyk?si=1uQbVfn3vZGq_6kU" frameborder="0" allowfullscreen></iframe></div>
                     <div class="video-item"><iframe width="280" height="157" src="https://www.youtube.com/embed/2mJk3Jy1oHU?si=zR2cbamHKO4_cHbZ" frameborder="0" allowfullscreen></iframe></div>
                     <div class="video-item"><iframe width="280" height="157" src="https://www.youtube.com/embed/Ok-YSXY_vTM?si=ZMH8-RdJiKMKb__0" frameborder="0" allowfullscreen></iframe></div>
                 </div>
                 <div style="height: 60px;"></div>
-                <div class="video-center-wrapper"><span class="video-category-title">Live Performances</span></div>
+                <div class="video-center-wrapper"><span class="video-category-title" data-i18n="live_performances">Live Performances</span></div>
                 <div class="video-grid">
                     <div class="video-item"><iframe width="280" height="157" src="https://www.youtube.com/embed/IeMibrUV7Ts?si=IUXTouzcm3YrO8Z9" frameborder="0" allowfullscreen></iframe></div>
                     <div class="video-item"><iframe width="280" height="157" src="https://www.youtube.com/embed/5h2dXFjnvoc?si=Cp_5YO9NAozC9Evt" frameborder="0" allowfullscreen></iframe></div>
@@ -694,12 +880,11 @@
         </section>
 
         <section id="media" class="page-section content-wrapper">
-            <h2>MEDIA</h2>
+            <h2 data-i18n="nav_media_header">MEDIA</h2>
             <div class="highlights-grid">
-                
                 <div class="highlight-item">
                     <blockquote class="instagram-media" data-instgrm-captioned data-instgrm-permalink="https://www.instagram.com/reel/DUnqGPCDUcG/?utm_source=ig_embed&utm_campaign=loading" data-instgrm-version="14" style=" background:#FFF; border:0; border-radius:3px; box-shadow:0 0 1px 0 rgba(0,0,0,0.5),0 1px 10px 0 rgba(0,0,0,0.15); margin: 1px; max-width:540px; min-width:326px; padding:0; width:99.375%; width:-webkit-calc(100% - 2px); width:calc(100% - 2px);">
-                        </blockquote>
+                    </blockquote>
                 </div>
 
                 <div class="highlight-item yt-container">
@@ -716,14 +901,14 @@
 
             </div>
             <div style="text-align: center; margin-bottom: 50px;">
-                <a href="https://www.instagram.com/mrfakala.sound/" target="_blank" class="follow-me-btn">
+                <a href="https://www.instagram.com/mrfakala.sound/" target="_blank" class="follow-me-btn" data-i18n="follow_me">
                     FOR MORE, FOLLOW ME ON INSTAGRAM
                 </a>
             </div>
         </section>
 
         <section id="studio" class="page-section content-wrapper">
-            <h2>FAKALA IN STUDIO</h2>
+            <h2 data-i18n="nav_studio_header">FAKALA IN STUDIO</h2>
             <div class="split-layout">
                 <div class="text-column">
                     <div class="studio-list">
@@ -812,7 +997,7 @@
         </section>
 
         <section id="contributions" class="page-section content-wrapper">
-            <h2>CONTRIBUTIONS</h2>
+            <h2 data-i18n="nav_contributions_header">CONTRIBUTIONS</h2>
             <div class="split-layout">
                 <div class="text-column">
                     <div class="contributions-list">
@@ -820,64 +1005,64 @@
                         <div class="contribution-item">
                             <img src="8.jpg" alt="xAI Logo" class="contribution-logo">
                             <div class="contribution-text">
-                                <a href="https://x.ai" target="_blank" class="contribution-title">Multilingual Audio Editing AI Tutor - Contractor (Since May 2026)</a>
-                                <div class="contribution-desc">AI training for xAI</div>
+                                <a href="https://x.ai" target="_blank" class="contribution-title" data-i18n="cont_xai_title">Multilingual Audio Editing AI Tutor - Contractor (May 2026 - June 2026)</a>
+                                <div class="contribution-desc" data-i18n="cont_xai_desc">AI training for xAI</div>
                             </div>
                         </div>
 
                         <div class="contribution-item">
                             <img src="1.jpg" alt="BeatpulseLabs Logo" class="contribution-logo">
                             <div class="contribution-text">
-                                <a href="https://beatpulselabs.com" target="_blank" class="contribution-title">Music Annotator (Since March 2026)</a>
-                                <div class="contribution-desc">Annotation music for BeatpulseLabs</div>
+                                <a href="https://beatpulselabs.com" target="_blank" class="contribution-title" data-i18n="cont_beatpulse_title">Music Annotator (March 2026 - May 2026)</a>
+                                <div class="contribution-desc" data-i18n="cont_beatpulse_desc">Annotation music for BeatpulseLabs</div>
                             </div>
                         </div>
 
                         <div class="contribution-item">
                             <img src="2.jpg" alt="Rasgele Ankara Logo" class="contribution-logo">
                             <div class="contribution-text">
-                                <a href="https://rasgeleankara.com" target="_blank" class="contribution-title">Live Sound Engineer (2025 Aug - 2025 Sep)</a>
-                                <div class="contribution-desc">Worked as a live sound engineer at Rasgele Ankara</div>
+                                <a href="https://rasgeleankara.com" target="_blank" class="contribution-title" data-i18n="cont_rasgele_title">Live Sound Engineer (2025 Aug - 2025 Sep)</a>
+                                <div class="contribution-desc" data-i18n="cont_rasgele_desc">Worked as a live sound engineer at Rasgele Ankara</div>
                             </div>
                         </div>
 
                         <div class="contribution-item">
                             <img src="3.jpg" alt="Zürafa PSM Logo" class="contribution-logo">
                             <div class="contribution-text">
-                                <a href="https://www.instagram.com/zurafapsm/" target="_blank" class="contribution-title">Live Sound Engineer (2025 May - 2025 Nov)</a>
-                                <div class="contribution-desc">Worked as a live sound engineer at Zürafa PSM</div>
+                                <a href="https://www.instagram.com/zurafapsm/" target="_blank" class="contribution-title" data-i18n="cont_zurafa_title">Live Sound Engineer (2025 May - 2025 Nov)</a>
+                                <div class="contribution-desc" data-i18n="cont_zurafa_desc">Worked as a live sound engineer at Zürafa PSM</div>
                             </div>
                         </div>
 
                         <div class="contribution-item">
                             <img src="4.jpg" alt="Leap of Faith Music Studio Logo" class="contribution-logo">
                             <div class="contribution-text">
-                                <a href="https://www.instagram.com/lof.music.studio/" target="_blank" class="contribution-title">Mixing Engineer (2024 Apr - 2024 June)</a>
-                                <div class="contribution-desc">Worked as a mixing engineer at the Leap of Faith Music Studio</div>
+                                <a href="https://www.instagram.com/lof.music.studio/" target="_blank" class="contribution-title" data-i18n="cont_lof_title">Mixing Engineer (2024 Apr - 2024 June)</a>
+                                <div class="contribution-desc" data-i18n="cont_lof_desc">Worked as a mixing engineer at the Leap of Faith Music Studio</div>
                             </div>
                         </div>
 
                         <div class="contribution-item">
                             <img src="5.jpg" alt="Çığ Gösteri Merkezi Logo" class="contribution-logo">
                             <div class="contribution-text">
-                                <a href="https://www.instagram.com/cig_gosteri_merkezi/" target="_blank" class="contribution-title">Live Sound Engineer (2022 Apr - 2023 July)</a>
-                                <div class="contribution-desc">Worked as a live sound engineer at Çığ Gösteri Merkezi.</div>
+                                <a href="https://www.instagram.com/cig_gosteri_merkezi/" target="_blank" class="contribution-title" data-i18n="cont_cig_title">Live Sound Engineer (2022 Apr - 2023 July)</a>
+                                <div class="contribution-desc" data-i18n="cont_cig_desc">Worked as a live sound engineer at Çığ Gösteri Merkezi.</div>
                             </div>
                         </div>
 
                         <div class="contribution-item">
                             <img src="6.jpg" alt="Gece Üç Gibi Logo" class="contribution-logo">
                             <div class="contribution-text">
-                                <a href="https://www.instagram.com/geceucgibi/" target="_blank" class="contribution-title">Bass Guitar Player (2021 Nov - 2022 Apr)</a>
-                                <div class="contribution-desc">Played bass guitar for the band “Gece Üç Gibi” at concerts and records</div>
+                                <a href="https://www.instagram.com/geceucgibi/" target="_blank" class="contribution-title" data-i18n="cont_gece_title">Bass Guitar Player (2021 Nov - 2022 Apr)</a>
+                                <div class="contribution-desc" data-i18n="cont_gece_desc">Played bass guitar for the band “Gece Üç Gibi” at concerts and records</div>
                             </div>
                         </div>
 
                         <div class="contribution-item">
                             <img src="7.jpg" alt="Click Music TR Logo" class="contribution-logo">
                             <div class="contribution-text">
-                                <a href="https://www.instagram.com/clickmusictr/" target="_blank" class="contribution-title">Recording Assistant  (2020 Feb - 2020 Jan)</a>
-                                <div class="contribution-desc">Worked with music producer “Neşet Kılıç” as an assistant at Click Music TR (helping with recording and mixing equipment, editing after recording)</div>
+                                <a href="https://www.instagram.com/clickmusictr/" target="_blank" class="contribution-title" data-i18n="cont_click_title">Recording Assistant  (2020 Feb - 2020 Jan)</a>
+                                <div class="contribution-desc" data-i18n="cont_click_desc">Worked with music producer “Neşet Kılıç” as an assistant at Click Music TR (helping with recording and mixing equipment, editing after recording)</div>
                             </div>
                         </div>
 
@@ -887,8 +1072,8 @@
         </section>
 
         <section id="livesound" class="page-section content-wrapper">
-            <h2>LIVE SOUND</h2>
-            <p class="live-sound-intro">Worked in live sound for these musicians/bands at least once</p>
+            <h2 data-i18n="nav_livesound_header">LIVE SOUND</h2>
+            <p class="live-sound-intro" data-i18n="live_sound_desc">Worked in live sound for these musicians/bands at least once</p>
             <div class="live-sound-list">
                 <span>Mustafa Özarslan</span>
                 <span>Caner Gülsüm</span>
@@ -935,7 +1120,7 @@
         </section>
 
         <section id="instrumentalist" class="page-section content-wrapper">
-            <h2>FAKALA AS AN INSTRUMENTALIST</h2>
+            <h2 data-i18n="nav_instrumentalist_header">FAKALA AS AN INSTRUMENTALIST</h2>
             <div class="split-layout">
                 <div class="text-column">
                     <div class="studio-list">
@@ -987,7 +1172,7 @@
         </section>
 
         <section id="composer" class="page-section content-wrapper">
-            <h2>FAKALA AS A COMPOSER</h2>
+            <h2 data-i18n="nav_composer_header">FAKALA AS A COMPOSER</h2>
             <div class="split-layout">
                 <div class="text-column">
                     <div class="studio-list">
@@ -1026,17 +1211,17 @@
         </section>
 
         <section id="hikaye" class="page-section content-wrapper">
-            <h2>THE HIKAYE PROJECT</h2>
+            <h2 data-i18n="nav_hikaye_header">THE HIKAYE PROJECT</h2>
             <div class="text-content">
-                <p style="text-align: center; font-size: 1.5rem; color: #888;">Work in progress...</p>
+                <p style="text-align: center; font-size: 1.5rem; color: #888;" data-i18n="work_in_progress">Work in progress...</p>
             </div>
         </section>
 
         <section id="dogac" class="page-section content-wrapper">
-            <h2>DOĞAÇ MÜZİK</h2>
+            <h2 data-i18n="nav_dogac_header">DOĞAÇ MÜZİK</h2>
             
             <div style="text-align:center; margin-bottom: 40px;">
-                <a href="https://www.instagram.com/dogacmuzik/" target="_blank" class="follow-me-btn">
+                <a href="https://www.instagram.com/dogacmuzik/" target="_blank" class="follow-me-btn" data-i18n="visit_dogac">
                     VISIT DOĞAÇ MÜZİK INSTAGRAM
                 </a>
             </div>
@@ -1052,11 +1237,11 @@
         </section>
 
         <section id="contact" class="page-section content-wrapper">
-            <h2>CONTACT</h2>
+            <h2 data-i18n="nav_contact">CONTACT</h2>
             <div class="contact-list">
                 <a href="mailto:faklrecords@gmail.com" class="contact-link">faklrecords@gmail.com</a>
                 <a href="https://www.instagram.com/mrfakala.sound/" target="_blank" class="contact-link">instagram.com/mrfakala.sound</a>
-                <a href="https://share.google/QCjQ4118BBUANS0Iu" target="_blank" class="contact-link">Location / Share</a>
+                <a href="https://share.google/QCjQ4118BBUANS0Iu" target="_blank" class="contact-link" data-i18n="location_share">Location / Share</a>
             </div>
         </section>
 
@@ -1065,26 +1250,427 @@
     <script async src="https://www.instagram.com/embed.js"></script>
 
     <script>
-        function toggleMenu() {
-            const sidebar = document.getElementById('sidebar');
-            const arrow = document.getElementById('menu-arrow');
+        // --- DİL VE UYARI SÖZLÜĞÜ ---
+        const i18n = {
+            "en": {
+                "menu_text": "MENU",
+                "nav_home": "Homepage",
+                "nav_showroom": "Showroom",
+                "nav_elaborate": "Elaborate ▾",
+                "nav_musician": "- Fakala as a Musician",
+                "nav_tech": "- Fakala in Sound Tech ▾",
+                "nav_studio": "-- Fakala in Studio",
+                "nav_media": "-- Media",
+                "nav_livesound": "-- Live Sound",
+                "nav_contributions": "-- Contributions",
+                "nav_instrumentalist": "- Fakala as an Instrumentalist",
+                "nav_composer": "- Fakala as a Composer",
+                "nav_projects": "- Fakala's Projects ▾",
+                "nav_hikaye": "-- The Hikaye Project",
+                "nav_dogac": "-- Doğaç Müzik",
+                "nav_contact": "Contact",
+
+                /* Sayfa İçi Header Çevirileri İçin */
+                "nav_musician_header": "FAKALA AS A MUSICIAN",
+                "nav_tech_header": "FAKALA IN SOUND TECH",
+                "nav_studio_header": "FAKALA IN STUDIO",
+                "nav_media_header": "MEDIA",
+                "nav_livesound_header": "LIVE SOUND",
+                "nav_contributions_header": "CONTRIBUTIONS",
+                "nav_instrumentalist_header": "FAKALA AS AN INSTRUMENTALIST",
+                "nav_composer_header": "FAKALA AS A COMPOSER",
+                "nav_hikaye_header": "THE HIKAYE PROJECT",
+                "nav_dogac_header": "DOĞAÇ MÜZİK",
+
+                "home_title": "WELCOME",
+                "home_desc": "This is a portfolio of Fakala (Taylan Yıldırır)",
+                
+                "sh_p1_title": "The Project \"Fakala\"",
+                "sh_p1_desc": "I would like to introduce my Musician career as my primary audio job. I composed, recorded, performed (most of the instruments), produced, mixed and mastered for all of my Fakala career.",
+                "sh_p1_link": "(More detailed information is available on the 'Fakala as a Musician' page.)",
+                
+                "sh_p2_desc": "This is a piece source of pride for me. I used to listen Çağrı Sinci when I was a high school student. Now I have produced one of his track from his EP 'Çiçek Böcek' also in LP 'Klasik'.",
+                
+                "sh_p3_title": "Soundtrack for the game \"Sagas of Lumin\"",
+                "sh_p3_desc": "I’m beyond thrilled to say that I contributed to this magical world by composing two original tracks for the game that you can ride dragons! Watching the trailer in the Future Games Show alongside so many great titles was a great moment.",
+                
+                "sh_p4_desc": "The song that I produced \"Dört Duvar\" by Mert Ersoy was streamed around 70k on YouTube in first the week! And his second single “Bir İleri İki Geri” is also produced by me.",
+                
+                "sh_p5_title": "AI & Data Projects",
+                "sh_p5_desc": "Completing AI training tasks like audio annotation and QA for xAI and annotating music with emotional, cultural and musical data for BeatpulseLabs",
+
+                "musician_p1": "In 2022, made his debut on digital music platforms with his work",
+                "musician_p1_2": "This work strongly demonstrates Fakala's storytelling side. In 2022, he released an album called",
+                "musician_p1_3": "which conveyed his music learning process and the confusing problems of a teenager. Released 2 singles titled 'Yanımda Ol' and 'AMA BEN SİKTİR ETMEK İSTEMİYORUMM!!'.",
+                "musician_p2": "In 2023, released a single 'Hayat Boktan'. In 2024, released two singles 'Tinnitus' and 'Gözlerini Kapat ve Sus'.",
+                "musician_p2_2": "was listened to more than 20,000 times on Spotify within 2 months. On May 31, 2024, 'En Güzel İlhamlar', the first piece from his album",
+                "musician_p2_3": "was pre released. The track entered the Spotify 'Fresh Finds Türkiye' list at number one. The track from this album 'Teşhis' has reached more than 40,000 listens on Spotify.",
+                "musician_p3": "Performed as Fakala. Some of them has videos on Youtube. After the Album",
+                "musician_p3_2": "has released, 4 different internet magazines (Rotka, BBI, Müzik Ekspres, Beatsommelier) has published an article about “Fakala”. The song “En Güzel İlhamlar” from this album has stayed on the first place of",
+                "musician_p3_3": "editorial list for a month. Directed and published 3 music videos as “Fakala”.",
+
+                "music_videos": "Music Videos",
+                "live_performances": "Live Performances",
+                "follow_me": "FOR MORE, FOLLOW ME ON INSTAGRAM",
+                
+                "cont_xai_title": "Multilingual Audio Editing AI Tutor - Contractor (May 2026 - June 2026)",
+                "cont_xai_desc": "AI training for xAI",
+                "cont_beatpulse_title": "Music Annotator (March 2026 - May 2026)",
+                "cont_beatpulse_desc": "Annotation music for BeatpulseLabs",
+                "cont_rasgele_title": "Live Sound Engineer (2025 Aug - 2025 Sep)",
+                "cont_rasgele_desc": "Worked as a live sound engineer at Rasgele Ankara",
+                "cont_zurafa_title": "Live Sound Engineer (2025 May - 2025 Nov)",
+                "cont_zurafa_desc": "Worked as a live sound engineer at Zürafa PSM",
+                "cont_lof_title": "Mixing Engineer (2024 Apr - 2024 June)",
+                "cont_lof_desc": "Worked as a mixing engineer at the Leap of Faith Music Studio",
+                "cont_cig_title": "Live Sound Engineer (2022 Apr - 2023 July)",
+                "cont_cig_desc": "Worked as a live sound engineer at Çığ Gösteri Merkezi.",
+                "cont_gece_title": "Bass Guitar Player (2021 Nov - 2022 Apr)",
+                "cont_gece_desc": "Played bass guitar for the band “Gece Üç Gibi” at concerts and records",
+                "cont_click_title": "Recording Assistant  (2020 Feb - 2020 Jan)",
+                "cont_click_desc": "Worked with music producer “Neşet Kılıç” as an assistant at Click Music TR (helping with recording and mixing equipment, editing after recording)",
+
+                "live_sound_desc": "Worked in live sound for these musicians/bands at least once",
+                "work_in_progress": "Work in progress...",
+                "visit_dogac": "VISIT DOĞAÇ MÜZİK INSTAGRAM",
+                "location_share": "Location / Share"
+            },
+            "tr": {
+                "menu_text": "MENÜ",
+                "nav_home": "Ana Sayfa",
+                "nav_showroom": "Vitrin (Showroom)",
+                "nav_elaborate": "Detaylı İncele ▾",
+                "nav_musician": "- Müzisyen Olarak Fakala",
+                "nav_tech": "- Ses Teknolojisinde Fakala ▾",
+                "nav_studio": "-- Stüdyoda Fakala",
+                "nav_media": "-- Medya",
+                "nav_livesound": "-- Canlı Ses",
+                "nav_contributions": "-- Katkılar",
+                "nav_instrumentalist": "- Enstrümantalist Olarak Fakala",
+                "nav_composer": "- Besteci Olarak Fakala",
+                "nav_projects": "- Fakala'nın Projeleri ▾",
+                "nav_hikaye": "-- The Hikaye Projesi",
+                "nav_dogac": "-- Doğaç Müzik",
+                "nav_contact": "İletişim",
+
+                "nav_musician_header": "MÜZİSYEN OLARAK FAKALA",
+                "nav_tech_header": "SES TEKNOLOJİSİNDE FAKALA",
+                "nav_studio_header": "STÜDYODA FAKALA",
+                "nav_media_header": "MEDYA",
+                "nav_livesound_header": "CANLI SES",
+                "nav_contributions_header": "KATKILAR",
+                "nav_instrumentalist_header": "ENSTRÜMANTALİST OLARAK FAKALA",
+                "nav_composer_header": "BESTECİ OLARAK FAKALA",
+                "nav_hikaye_header": "THE HİKAYE PROJESİ",
+                "nav_dogac_header": "DOĞAÇ MÜZİK",
+
+                "home_title": "HOŞGELDİNİZ",
+                "home_desc": "Bu bir Fakala (Taylan Yıldırır) portfolyosudur.",
+                
+                "sh_p1_title": "\"Fakala\" Projesi",
+                "sh_p1_desc": "Müzisyenlik kariyerimi birincil ses işim olarak tanıtmak isterim. Fakala kariyerim boyunca besteledim, kaydettim, icra ettim (çoğu enstrümanı), prodüksiyonunu yaptım, miksledim ve mastering işlemlerini üstlendim.",
+                "sh_p1_link": "(Daha detaylı bilgi 'Müzisyen Olarak Fakala' sayfasında mevcuttur.)",
+                
+                "sh_p2_desc": "Bu parça benim için bir gurur kaynağı. Lise öğrencisiyken Çağrı Sinci dinlerdim. Şimdi ise 'Çiçek Böcek' EP'sinden ve ayrıca 'Klasik' LP'sinden bir parçasının prodüktörlüğünü yaptım.",
+                
+                "sh_p3_title": "\"Sagas of Lumin\" Oyunu İçin Müzikler",
+                "sh_p3_desc": "Ejderhalara binebildiğiniz bu oyun için iki orijinal parça besteleyerek bu büyülü dünyaya katkıda bulunduğumu söylemekten büyük heyecan duyuyorum! Future Games Show'da fragmanı bu kadar çok harika oyunla birlikte izlemek harika bir andı.",
+                
+                "sh_p4_desc": "Mert Ersoy'un prodüktörlüğünü yaptığım 'Dört Duvar' adlı şarkısı ilk haftasında YouTube'da yaklaşık 70 bin kez dinlendi! Ve ikinci teklisi 'Bir İleri İki Geri'nin prodüktörlüğünü de ben üstlendim.",
+                
+                "sh_p5_title": "Yapay Zeka ve Veri Projeleri",
+                "sh_p5_desc": "xAI için ses etiketleme ve kalite kontrol (QA) gibi yapay zeka eğitim görevlerini tamamlamak ve BeatpulseLabs için müzikleri duygusal, kültürel ve müzikal verilerle etiketlemek.",
+
+                "musician_p1": "2022 yılında, dijital müzik platformlarına girişini",
+                "musician_p1_2": "adlı çalışmasıyla yaptı. Bu eser, Fakala'nın hikaye anlatıcı yönünü güçlü bir şekilde gösteriyor. 2022'de, müzik öğrenme sürecini ve bir gencin kafa karıştırıcı sorunlarını anlatan",
+                "musician_p1_3": "adlı albümünü yayınladı. 'Yanımda Ol' ve 'AMA BEN SİKTİR ETMEK İSTEMİYORUMM!!' adlı 2 tekli çıkardı.",
+                "musician_p2": "2023 yılında 'Hayat Boktan' adlı tekliyi yayınladı. 2024'te 'Tinnitus' ve 'Gözlerini Kapat ve Sus' adlı iki tekli çıkardı.",
+                "musician_p2_2": "Spotify'da 2 ay içinde 20.000'den fazla dinlendi. 31 Mayıs 2024'te,",
+                "musician_p2_3": "albümünün ilk parçası olan 'En Güzel İlhamlar' ön yayına girdi. Parça, Spotify 'Fresh Finds Türkiye' listesine bir numaradan giriş yaptı. Bu albümdeki 'Teşhis' parçası Spotify'da 40.000'den fazla dinlenmeye ulaştı.",
+                "musician_p3": "Fakala olarak sahne aldı. Bazılarının Youtube'da videoları var.",
+                "musician_p3_2": "albümü yayınlandıktan sonra 4 farklı internet dergisi (Rotka, BBI, Müzik Ekspres, Beatsommelier) 'Fakala' hakkında makale yayınladı. Bu albümden 'En Güzel İlhamlar' adlı şarkı,",
+                "musician_p3_3": "editoryal listesinin birinci sırasında bir ay boyunca kaldı. Fakala olarak 3 müzik klibi yönetti ve yayınladı.",
+
+                "music_videos": "Müzik Klipleri",
+                "live_performances": "Canlı Performanslar",
+                "follow_me": "DAHA FAZLASI İÇİN BENİ INSTAGRAM'DA TAKİP EDİN",
+
+                "cont_xai_title": "Çok Dilli Ses Düzenleme AI Eğitmeni - Yüklenici (Mayıs 2026 - Haziran 2026)",
+                "cont_xai_desc": "xAI için AI eğitimi",
+                "cont_beatpulse_title": "Müzik Etiketleyici (Mart 2026 - Mayıs 2026)",
+                "cont_beatpulse_desc": "BeatpulseLabs için müzik etiketleme",
+                "cont_rasgele_title": "Canlı Ses Mühendisi (2025 Ağu - 2025 Eyl)",
+                "cont_rasgele_desc": "Rasgele Ankara'da canlı ses mühendisi olarak çalıştı",
+                "cont_zurafa_title": "Canlı Ses Mühendisi (2025 May - 2025 Kas)",
+                "cont_zurafa_desc": "Zürafa PSM'de canlı ses mühendisi olarak çalıştı",
+                "cont_lof_title": "Miks Mühendisi (2024 Nis - 2024 Haz)",
+                "cont_lof_desc": "Leap of Faith Music Studio'da miks mühendisi olarak çalıştı",
+                "cont_cig_title": "Canlı Ses Mühendisi (2022 Nis - 2023 Tem)",
+                "cont_cig_desc": "Çığ Gösteri Merkezi'nde canlı ses mühendisi olarak çalıştı.",
+                "cont_gece_title": "Bas Gitarist (2021 Kas - 2022 Nis)",
+                "cont_gece_desc": "Konserlerde ve kayıtlarda “Gece Üç Gibi” grubu için bas gitar çaldı",
+                "cont_click_title": "Kayıt Asistanı (2020 Şub - 2020 Oca)",
+                "cont_click_desc": "Click Music TR'de müzik yapımcısı “Neşet Kılıç” ile asistan olarak çalıştı (kayıt ve miks ekipmanlarına, kayıt sonrası düzenlemelere yardım etti)",
+
+                "live_sound_desc": "Bu müzisyenler/gruplar için en az bir kez canlı ses mühendisi olarak çalıştı",
+                "work_in_progress": "Yapım aşamasında...",
+                "visit_dogac": "DOĞAÇ MÜZİK INSTAGRAM SAYFASINI ZİYARET ET",
+                "location_share": "Konum / Paylaş"
+            },
+            "es": {
+                "menu_text": "MENÚ",
+                "nav_home": "Inicio",
+                "nav_showroom": "Exhibición",
+                "nav_elaborate": "Elaborar ▾",
+                "nav_musician": "- Fakala como Músico",
+                "nav_tech": "- Fakala en Tec de Sonido ▾",
+                "nav_studio": "-- Fakala en Estudio",
+                "nav_media": "-- Medios",
+                "nav_livesound": "-- Sonido en Vivo",
+                "nav_contributions": "-- Contribuciones",
+                "nav_instrumentalist": "- Fakala como Instrumentista",
+                "nav_composer": "- Fakala como Compositor",
+                "nav_projects": "- Proyectos de Fakala ▾",
+                "nav_hikaye": "-- El Proyecto Hikaye",
+                "nav_dogac": "-- Doğaç Müzik",
+                "nav_contact": "Contacto",
+                
+                "nav_musician_header": "FAKALA COMO MÚSICO",
+                "nav_tech_header": "FAKALA EN TECNOLOGÍA DE SONIDO",
+                "nav_studio_header": "FAKALA EN ESTUDIO",
+                "nav_media_header": "MEDIOS",
+                "nav_livesound_header": "SONIDO EN VIVO",
+                "nav_contributions_header": "CONTRIBUCIONES",
+                "nav_instrumentalist_header": "FAKALA COMO INSTRUMENTISTA",
+                "nav_composer_header": "FAKALA COMO COMPOSITOR",
+                "nav_hikaye_header": "EL PROYECTO HIKAYE",
+                "nav_dogac_header": "DOĞAÇ MÜZİK",
+
+                "home_title": "BIENVENIDO",
+                "home_desc": "Este es el portafolio de Fakala (Taylan Yıldırır)",
+                
+                "sh_p1_title": "El Proyecto \"Fakala\"",
+                "sh_p1_desc": "Me gustaría presentar mi carrera musical como mi principal trabajo de audio. Compuse, grabé, interpreté (la mayoría de los instrumentos), produje, mezclé y mastericé para toda mi carrera de Fakala.",
+                "sh_p1_link": "(Información más detallada está disponible en la página 'Fakala como Músico'.)",
+                
+                "sh_p2_desc": "Esta es una pieza de orgullo para mí. Solía escuchar a Çağrı Sinci cuando era estudiante de secundaria. Ahora he producido una de sus canciones de su EP 'Çiçek Böcek' y también en el LP 'Klasik'.",
+                
+                "sh_p3_title": "Banda sonora del juego \"Sagas of Lumin\"",
+                "sh_p3_desc": "¡Estoy más que emocionado de decir que contribuí a este mundo mágico componiendo dos pistas originales para el juego en el que puedes montar dragones! Ver el tráiler en el Future Games Show junto a tantos grandes títulos fue un gran momento.",
+                
+                "sh_p4_desc": "¡La canción que produje 'Dört Duvar' de Mert Ersoy se reprodujo alrededor de 70k en YouTube en la primera semana! Y su segundo sencillo 'Bir İleri İki Geri' también es producido por mí.",
+                
+                "sh_p5_title": "Proyectos de IA y Datos",
+                "sh_p5_desc": "Completar tareas de entrenamiento de IA como anotación de audio y control de calidad para xAI y anotar música con datos emocionales, culturales y musicales para BeatpulseLabs.",
+
+                "musician_p1": "En 2022, hizo su debut en plataformas de música digital con su obra",
+                "musician_p1_2": "Esta obra demuestra fuertemente el lado narrativo de Fakala. En 2022, lanzó un álbum llamado",
+                "musician_p1_3": "que transmitió su proceso de aprendizaje musical y los confusos problemas de un adolescente. Lanzó 2 sencillos titulados 'Yanımda Ol' y 'AMA BEN SİKTİR ETMEK İSTEMİYORUMM!!'.",
+                "musician_p2": "En 2023, lanzó un sencillo 'Hayat Boktan'. En 2024, lanzó dos sencillos 'Tinnitus' y 'Gözlerini Kapat ve Sus'.",
+                "musician_p2_2": "fue escuchado más de 20.000 veces en Spotify en 2 meses. El 31 de mayo de 2024, 'En Güzel İlhamlar', la primera pieza de su álbum",
+                "musician_p2_3": "fue prelanzada. La pista entró en la lista 'Fresh Finds Türkiye' de Spotify en el número uno. La pista de este álbum 'Teşhis' ha alcanzado más de 40.000 escuchas en Spotify.",
+                "musician_p3": "Actuó como Fakala. Algunos de ellos tienen videos en Youtube. Después del álbum",
+                "musician_p3_2": "fue lanzado, 4 diferentes revistas de internet publicaron un artículo sobre 'Fakala'. La canción 'En Güzel İlhamlar' de este álbum se ha mantenido en el primer lugar de la",
+                "musician_p3_3": "lista editorial durante un mes. Dirigió y publicó 3 videos musicales como 'Fakala'.",
+
+                "music_videos": "Videos Musicales",
+                "live_performances": "Actuaciones en Vivo",
+                "follow_me": "PARA MÁS, SÍGUEME EN INSTAGRAM",
+
+                "cont_xai_title": "Tutor de IA de edición de audio - Contratista (May 2026 - Jun 2026)",
+                "cont_xai_desc": "Entrenamiento de IA para xAI",
+                "cont_beatpulse_title": "Anotador de Música (Mar 2026 - May 2026)",
+                "cont_beatpulse_desc": "Anotación de música para BeatpulseLabs",
+                "cont_rasgele_title": "Ingeniero de sonido en vivo (2025 Ago - 2025 Sep)",
+                "cont_rasgele_desc": "Trabajó como ingeniero de sonido en vivo en Rasgele Ankara",
+                "cont_zurafa_title": "Ingeniero de sonido en vivo (2025 May - 2025 Nov)",
+                "cont_zurafa_desc": "Trabajó como ingeniero de sonido en vivo en Zürafa PSM",
+                "cont_lof_title": "Ingeniero de mezcla (2024 Abr - 2024 Jun)",
+                "cont_lof_desc": "Trabajó como ingeniero de mezcla en Leap of Faith Music Studio",
+                "cont_cig_title": "Ingeniero de sonido en vivo (2022 Abr - 2023 Jul)",
+                "cont_cig_desc": "Trabajó como ingeniero de sonido en vivo en Çığ Gösteri Merkezi.",
+                "cont_gece_title": "Bajista (2021 Nov - 2022 Abr)",
+                "cont_gece_desc": "Tocó el bajo para la banda “Gece Üç Gibi” en conciertos y grabaciones",
+                "cont_click_title": "Asistente de Grabación (2020 Feb - 2020 Ene)",
+                "cont_click_desc": "Trabajó con el productor “Neşet Kılıç” como asistente en Click Music TR",
+
+                "live_sound_desc": "Trabajó en sonido en vivo para estos músicos/bandas al menos una vez",
+                "work_in_progress": "Trabajo en curso...",
+                "visit_dogac": "VISITA EL INSTAGRAM DE DOĞAÇ MÜZİK",
+                "location_share": "Ubicación / Compartir"
+            },
+            "de": {
+                "menu_text": "MENÜ",
+                "nav_home": "Startseite",
+                "nav_showroom": "Ausstellungsraum",
+                "nav_elaborate": "Ausarbeiten ▾",
+                "nav_musician": "- Fakala als Musiker",
+                "nav_tech": "- Fakala in Sound Tech ▾",
+                "nav_studio": "-- Fakala im Studio",
+                "nav_media": "-- Medien",
+                "nav_livesound": "-- Live-Sound",
+                "nav_contributions": "-- Beiträge",
+                "nav_instrumentalist": "- Fakala als Instrumentalist",
+                "nav_composer": "- Fakala als Komponist",
+                "nav_projects": "- Fakalas Projekte ▾",
+                "nav_hikaye": "-- Das Hikaye-Projekt",
+                "nav_dogac": "-- Doğaç Müzik",
+                "nav_contact": "Kontakt",
+                
+                "nav_musician_header": "FAKALA ALS MUSIKER",
+                "nav_tech_header": "FAKALA IN SOUND TECH",
+                "nav_studio_header": "FAKALA IM STUDIO",
+                "nav_media_header": "MEDIEN",
+                "nav_livesound_header": "LIVE-SOUND",
+                "nav_contributions_header": "BEITRÄGE",
+                "nav_instrumentalist_header": "FAKALA ALS INSTRUMENTALIST",
+                "nav_composer_header": "FAKALA ALS KOMPONIST",
+                "nav_hikaye_header": "DAS HIKAYE-PROJEKT",
+                "nav_dogac_header": "DOĞAÇ MÜZİK",
+
+                "home_title": "WILLKOMMEN",
+                "home_desc": "Dies ist ein Portfolio von Fakala (Taylan Yıldırır)",
+                
+                "sh_p1_title": "Das Projekt \"Fakala\"",
+                "sh_p1_desc": "Ich möchte meine Musikerkarriere als meine primäre Audio-Arbeit vorstellen. Ich habe komponiert, aufgenommen, aufgeführt (die meisten Instrumente), produziert, gemischt und gemastert für meine gesamte Fakala-Karriere.",
+                "sh_p1_link": "(Detailliertere Informationen finden Sie auf der Seite 'Fakala als Musiker'.)",
+                
+                "sh_p2_desc": "Das ist ein Stück Stolz für mich. Als Gymnasiast habe ich Çağrı Sinci gehört. Jetzt habe ich einen seiner Tracks aus seiner EP 'Çiçek Böcek' und auch auf der LP 'Klasik' produziert.",
+                
+                "sh_p3_title": "Soundtrack für das Spiel \"Sagas of Lumin\"",
+                "sh_p3_desc": "Ich bin mehr als begeistert zu sagen, dass ich zu dieser magischen Welt beigetragen habe, indem ich zwei Originaltitel für das Spiel komponiert habe, in dem man Drachen reiten kann! Den Trailer in der Future Games Show neben so vielen großartigen Titeln zu sehen, war ein großartiger Moment.",
+                
+                "sh_p4_desc": "Der Song, den ich produziert habe, 'Dört Duvar' von Mert Ersoy, wurde in der ersten Woche rund 70.000 Mal auf YouTube gestreamt! Und auch seine zweite Single 'Bir İleri İki Geri' wurde von mir produziert.",
+                
+                "sh_p5_title": "KI- & Datenprojekte",
+                "sh_p5_desc": "Abschluss von KI-Trainingsaufgaben wie Audio-Annotation und QA für xAI und Annotation von Musik mit emotionalen, kulturellen und musikalischen Daten für BeatpulseLabs.",
+
+                "musician_p1": "Im Jahr 2022 debütierte er auf digitalen Musikplattformen mit seinem Werk",
+                "musician_p1_2": "Dieses Werk demonstriert stark Fakalas erzählerische Seite. 2022 veröffentlichte er ein Album namens",
+                "musician_p1_3": "das seinen musikalischen Lernprozess und die verwirrenden Probleme eines Teenagers vermittelte. Veröffentlichte 2 Singles mit dem Titel 'Yanımda Ol' und 'AMA BEN SİKTİR ETMEK İSTEMİYORUMM!!'.",
+                "musician_p2": "Veröffentlichte 2023 eine Single 'Hayat Boktan'. Veröffentlichte 2024 zwei Singles 'Tinnitus' und 'Gözlerini Kapat ve Sus'.",
+                "musician_p2_2": "wurde innerhalb von 2 Monaten mehr als 20.000 Mal auf Spotify angehört. Am 31. Mai 2024 erschien 'En Güzel İlhamlar', das erste Stück aus seinem Album",
+                "musician_p2_3": "wurde vorab veröffentlicht. Der Track stieg auf Platz eins in die Spotify-Liste 'Fresh Finds Türkiye' ein. Der Track aus diesem Album 'Teşhis' hat auf Spotify mehr als 40.000 Hörer erreicht.",
+                "musician_p3": "Trat als Fakala auf. Einige davon haben Videos auf Youtube. Nach dem Album",
+                "musician_p3_2": "veröffentlicht wurde, haben 4 verschiedene Internetmagazine einen Artikel über 'Fakala' veröffentlicht. Das Lied 'En Güzel İlhamlar' aus diesem Album hielt sich auf dem ersten Platz der",
+                "musician_p3_3": "redaktionellen Liste für einen Monat. Er führte Regie und veröffentlichte 3 Musikvideos als 'Fakala'.",
+
+                "music_videos": "Musikvideos",
+                "live_performances": "Live-Auftritte",
+                "follow_me": "FÜR MEHR, FOLGE MIR AUF INSTAGRAM",
+
+                "cont_xai_title": "Mehrsprachiger Audiobearbeitungs-KI-Tutor (Mai 2026 - Jun 2026)",
+                "cont_xai_desc": "KI-Training für xAI",
+                "cont_beatpulse_title": "Musik-Kommentator (Mär 2026 - Mai 2026)",
+                "cont_beatpulse_desc": "Annotationsmusik für BeatpulseLabs",
+                "cont_rasgele_title": "Live-Sound-Ingenieur (2025 Aug - 2025 Sep)",
+                "cont_rasgele_desc": "Arbeitete als Live-Sound-Ingenieur bei Rasgele Ankara",
+                "cont_zurafa_title": "Live-Sound-Ingenieur (2025 Mai - 2025 Nov)",
+                "cont_zurafa_desc": "Arbeitete als Live-Sound-Ingenieur bei Zürafa PSM",
+                "cont_lof_title": "Mischtechniker (2024 Apr - 2024 Jun)",
+                "cont_lof_desc": "Arbeitete als Mischtechniker im Leap of Faith Music Studio",
+                "cont_cig_title": "Live-Sound-Ingenieur (2022 Apr - 2023 Jul)",
+                "cont_cig_desc": "Arbeitete als Live-Sound-Ingenieur bei Çığ Gösteri Merkezi.",
+                "cont_gece_title": "Bassgitarrist (2021 Nov - 2022 Apr)",
+                "cont_gece_desc": "Spielte Bassgitarre für die Band “Gece Üç Gibi”",
+                "cont_click_title": "Aufnahmeassistent (2020 Feb - 2020 Jan)",
+                "cont_click_desc": "Arbeitete mit dem Musikproduzenten “Neşet Kılıç” als Assistent zusammen",
+
+                "live_sound_desc": "Hat mindestens einmal im Live-Sound für diese Musiker/Bands gearbeitet",
+                "work_in_progress": "In Arbeit...",
+                "visit_dogac": "BESUCHEN SIE DOĞAÇ MÜZİK INSTAGRAM",
+                "location_share": "Ort / Teilen"
+            }
+        };
+
+        // --- UYARI MODALI YAZILARI ---
+        const langWarnings = {
+            'tr': {
+                text: "*İngilizce dışındaki tüm seçenekler yapay zeka tarafından çevrilmiştir, çeviride bir hata olabilir.*",
+                btn: "Tamam"
+            },
+            'es': {
+                text: "*Excepto el inglés, todas las opciones están traducidas por IA, podría haber un error de traducción.*",
+                btn: "Aceptar"
+            },
+            'de': {
+                text: "*Mit Ausnahme von Englisch werden alle Optionen von KI übersetzt, es könnte ein Übersetzungsfehler vorliegen.*",
+                btn: "OK"
+            }
+        };
+
+        function closeLangModal() {
+            const overlay = document.getElementById('langModalOverlay');
+            overlay.style.opacity = '0';
+            overlay.querySelector('.modal-content').style.transform = 'translateY(-20px)';
+            setTimeout(() => { 
+                overlay.style.display = 'none'; 
+            }, 300);
+        }
+
+        function initLang() {
+            // İlk açılışta dil menüsünü güncelle (Uyarı vermeden)
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (i18n['en'] && i18n['en'][key]) {
+                    el.innerText = i18n['en'][key];
+                }
+            });
+        }
+
+        function changeLang(lang) {
+            // Dil metinlerini güncelle
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (i18n[lang] && i18n[lang][key]) {
+                    el.innerText = i18n[lang][key];
+                }
+            });
             
-            sidebar.classList.toggle('active');
-            document.querySelector('.menu-toggle').classList.toggle('open');
-            
-            // Menüye tıklandığı an ok kalıcı olarak gizlenir.
-            if(arrow) {
-                arrow.style.display = 'none';
+            // Aktif buton görselini güncelle
+            document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById('btn-' + lang).classList.add('active');
+
+            // İngilizce dışında bir dil seçildiyse uyarıyı göster
+            if (lang !== 'en') {
+                const overlay = document.getElementById('langModalOverlay');
+                document.getElementById('langModalText').innerText = langWarnings[lang].text;
+                document.getElementById('langModalBtn').innerText = langWarnings[lang].btn;
+                
+                overlay.style.display = 'flex';
+                // CSS animasyonunun tetiklenmesi için ufak bir bekleme
+                setTimeout(() => { 
+                    overlay.style.opacity = '1'; 
+                    overlay.querySelector('.modal-content').style.transform = 'translateY(0)';
+                }, 10);
             }
         }
 
-        // Gelişmiş Submenu Toggle
-        function toggleSubmenu(id) {
+        function toggleMenu() {
+            const sidebar = document.getElementById('sidebar');
+            
+            sidebar.classList.toggle('active');
+            document.querySelector('.menu-toggle').classList.toggle('open');
+        }
+
+        // Parent menülerin kapanmasını engelleyen gelişmiş Submenu sistemi
+        function toggleSubmenu(id, event) {
+            if(event) event.stopPropagation(); // Parent'ın click eventini tetiklemesini engelle
+
             const submenu = document.getElementById(id);
-            // Diğer açık menüleri kapat
-            document.querySelectorAll('.submenu').forEach(el => {
-                if(el.id !== id) el.style.display = 'none';
-            });
+            
+            // Eğer nested bir menüyse, sadece kendi seviyesindeki kardeşlerini kapat
+            if (submenu.classList.contains('nested-submenu')) {
+                const parent = submenu.parentElement;
+                parent.querySelectorAll('.nested-submenu').forEach(el => {
+                    if(el.id !== id) el.style.display = 'none';
+                });
+            } else {
+                // Ana seviye bir submenu ise, diğer ana seviye submenüleri kapat
+                document.querySelectorAll('.submenu').forEach(el => {
+                    if(!el.classList.contains('nested-submenu') && el.id !== id) el.style.display = 'none';
+                });
+            }
             
             submenu.style.display = (submenu.style.display === 'block') ? 'none' : 'block';
         }
@@ -1094,25 +1680,20 @@
             const target = document.getElementById(id);
             const currentActive = document.querySelector('.page-section.active');
 
-            // Eğer zaten açık olan sayfaya tıklandıysa hiçbir şey yapma
             if (currentActive && currentActive.id === id) {
-                toggleMenu(); // Sadece menüyü kapat
+                toggleMenu(); 
                 return;
             }
 
-            // 2. Eğer açık bir sayfa varsa onu soldur (Fade Out)
             if (currentActive) {
                 currentActive.style.opacity = '0';
                 
-                // Animasyon bitene kadar bekle (300ms)
                 setTimeout(() => {
-                    // GÜVENLİK TEMİZLİĞİ
                     allSections.forEach(section => {
                         section.classList.remove('active');
                         section.style.opacity = '0';
                     });
 
-                    // Hedef sayfayı aç
                     if (target) {
                         target.classList.add('active');
                         setTimeout(() => {
@@ -1122,7 +1703,6 @@
                     }
                 }, 300);
             } else {
-                // İlk açılış veya hiç aktif sayfa yoksa direkt aç
                 if (target) {
                     allSections.forEach(s => s.classList.remove('active')); 
                     target.classList.add('active');
@@ -1133,7 +1713,14 @@
                 }
             }
 
-            toggleMenu(); // Menüyü kapat
+            // Showroom özel renk geçişi işlemi (Body class ile yönetilir)
+            if(id === 'showroom') {
+                document.body.classList.add('showroom-active');
+            } else {
+                document.body.classList.remove('showroom-active');
+            }
+
+            toggleMenu(); 
         }
     </script>
 </body>
