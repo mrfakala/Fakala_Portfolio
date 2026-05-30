@@ -134,6 +134,7 @@
             font-weight: 500;
             color: #fff;
             transition: color 0.4s;
+            cursor: pointer; /* Tıklanabilir olması için eklendi */
         }
 
         .lang-selector {
@@ -653,7 +654,6 @@
 </head>
 <body onload="initLang()">
 
-    <!-- DİL UYARI MODALI -->
     <div id="langModalOverlay" class="modal-overlay">
         <div class="modal-content">
             <p id="langModalText"></p>
@@ -668,7 +668,7 @@
                 <div class="bar"></div>
                 <div class="bar"></div>
             </button>
-            <span class="menu-text" data-i18n="menu_text">MENU</span>
+            <span class="menu-text" data-i18n="menu_text" onclick="toggleMenu()">MENU</span>
         </div>
         
         <div class="lang-selector">
@@ -691,7 +691,6 @@
                 <div class="submenu" id="elaborate-submenu">
                     <button onclick="goTo('musician')" data-i18n="nav_musician">- Fakala as a Musician</button>
                     
-                    <!-- İç İçe Submenu: Tech -->
                     <button onclick="toggleSubmenu('tech-submenu', event)" data-i18n="nav_tech">- Fakala in Sound Tech ▾</button>
                     <div class="submenu nested-submenu" id="tech-submenu">
                         <button onclick="goTo('studio')" data-i18n="nav_studio">-- Fakala in Studio</button>
@@ -703,7 +702,6 @@
                     <button onclick="goTo('instrumentalist')" data-i18n="nav_instrumentalist">- Fakala as an Instrumentalist</button>
                     <button onclick="goTo('composer')" data-i18n="nav_composer">- Fakala as a Composer</button>
                     
-                    <!-- İç İçe Submenu: Projects -->
                     <button onclick="toggleSubmenu('projects-submenu', event)" data-i18n="nav_projects">- Fakala's Projects ▾</button>
                     <div class="submenu nested-submenu" id="projects-submenu">
                         <button onclick="goTo('hikaye')" data-i18n="nav_hikaye">-- The Hikaye Project</button>
@@ -740,11 +738,9 @@
             </div>
         </section>
 
-        <!-- SHOWROOM BÖLÜMÜ -->
         <section id="showroom" class="page-section content-wrapper">
             <h2 data-i18n="nav_showroom">SHOWROOM</h2>
 
-            <!-- Panel 1 (Başlık güncellendi) -->
             <div class="showroom-panel">
                 <h3 data-i18n="sh_p1_title">The Project "Fakala"</h3>
                 <p data-i18n="sh_p1_desc">I would like to introduce my Musician career as my primary audio job. I composed, recorded, performed (most of the instruments), produced, mixed and mastered for all of my Fakala career.</p>
@@ -761,7 +757,6 @@
                 </div>
             </div>
 
-            <!-- Panel 2 -->
             <div class="showroom-panel">
                 <h3>Çağrı Sinci - Kreşendo</h3>
                 <p data-i18n="sh_p2_desc">This is a piece source of pride for me. I used to listen Çağrı Sinci when I was a high school student. Now I have produced one of his track from his EP "Çiçek Böcek" also in LP "Klasik".</p>
@@ -773,7 +768,6 @@
                 </div>
             </div>
 
-            <!-- Panel 3 (Başlık ve Açıklama güncellendi) -->
             <div class="showroom-panel">
                 <h3 data-i18n="sh_p3_title">Soundtrack for the game "Sagas of Lumin"</h3>
                 <p data-i18n="sh_p3_desc">I’m beyond thrilled to say that I contributed to this magical world by composing two original tracks for the game that you can ride dragons! Watching the trailer in the Future Games Show alongside so many great titles was a great moment.</p>
@@ -786,10 +780,9 @@
                 </div>
             </div>
 
-            <!-- Panel 4 -->
             <div class="showroom-panel">
                 <h3>Mert Ersoy - Dört Duvar & Bir İleri İki Geri</h3>
-                <p data-i18n="sh_p4_desc">The song that I produced "Dört Duvar" by Mert Ersoy was streamed around 70k on YouTube in first the week! And his second single “Bir İleri İki Geri” is also produced by me.</p>
+                <p data-i18n="sh_p4_desc">The song that I produced "Dört Duvar" by Mert Ersoy was streamed around 70k on YouTube in first the week! And his second single “Bir İleri İki Geri” that I composed, produced, performed, mixed & mastered by Mert Ersoy got 2 different editorial playlisted!!! "New Music Friday Türkiye" and "Türkçe Rock"!</p>
                 
                 <div class="grid-2">
                     <div class="iframe-container">
@@ -805,7 +798,6 @@
                 </div>
             </div>
 
-            <!-- Panel 5 (Fotoğraflar boyutlandırıldı ve linklendi) -->
             <div class="showroom-panel">
                 <h3 data-i18n="sh_p5_title">AI & Data Projects</h3>
                 <p data-i18n="sh_p5_desc">Completing AI training tasks like audio annotation and QA for xAI and annotating music with emotional, cultural and musical data for BeatpulseLabs</p>
@@ -913,6 +905,7 @@
                 <div class="text-column">
                     <div class="studio-list">
                         <div class="year-group"><h3 class="year-title">2026</h3>
+                            <div class="track-item"><a href="https://www.youtube.com/watch?v=wkaAU105rh0" target="_blank">Mert Ersoy - Bir İleri İki Geri | Composing, Producing, Recording, Mixing, Mastering</a></div>
                             <div class="track-item"><a href="https://www.youtube.com/watch?v=8UqS8JgaWGI" target="_blank">Mert Ersoy - Dört Duvar | Composing, Producing, Recording, Mixing, Mastering</a></div>
                             <div class="track-item"><a href="https://www.youtube.com/watch?v=iNHjSrajxGI" target="_blank">Çağrı Sinci - Kreşendo | Composing, Producing</a></div>
                             <div class="track-item"><a href="https://www.youtube.com/watch?v=nJzTg_eiUxs" target="_blank">The Wanderer - Konurda Volta | Recording, Mixing, Mastering</a></div>
@@ -1125,6 +1118,7 @@
                 <div class="text-column">
                     <div class="studio-list">
                         <div class="year-group"><h3 class="year-title">2026</h3>
+                            <div class="track-item"><a href="https://www.youtube.com/watch?v=wkaAU105rh0" target="_blank">Mert Ersoy - Bir İleri İki Geri | Bass Guitar, Electric Guitar, Acoustic Guitar, Synthesizers</a></div>
                             <div class="track-item"><a href="https://www.youtube.com/watch?v=8UqS8JgaWGI" target="_blank">Mert Ersoy - Dört Duvar | Bass Guitar, Electric Guitar, Acoustic Guitar, Synthesizers</a></div>
                             <div class="track-item"><a href="https://www.youtube.com/watch?v=iNHjSrajxGI" target="_blank">Çağrı Sinci - Kreşendo | Synthesizers</a></div>
                         </div>
@@ -1177,6 +1171,7 @@
                 <div class="text-column">
                     <div class="studio-list">
                         <div class="year-group"><h3 class="year-title">2026</h3>
+                            <div class="track-item"><a href="https://www.youtube.com/watch?v=wkaAU105rh0" target="_blank">Mert Ersoy - Bir İleri İki Geri</a></div>
                             <div class="track-item"><a href="https://open.spotify.com/intl-tr/track/09YOjJao1nacXbeD70HkGq?si=ebdecb44a6524ebe" target="_blank">Fakala - Kocaman Bir Kalbin Var</a></div>
                             <div class="track-item"><a href="https://www.youtube.com/watch?v=8UqS8JgaWGI" target="_blank">Mert Ersoy - Dört Duvar</a></div>
                             <div class="track-item"><a href="https://www.youtube.com/watch?v=iNHjSrajxGI" target="_blank">Çağrı Sinci - Kreşendo</a></div>
@@ -1294,7 +1289,7 @@
                 "sh_p3_title": "Soundtrack for the game \"Sagas of Lumin\"",
                 "sh_p3_desc": "I’m beyond thrilled to say that I contributed to this magical world by composing two original tracks for the game that you can ride dragons! Watching the trailer in the Future Games Show alongside so many great titles was a great moment.",
                 
-                "sh_p4_desc": "The song that I produced \"Dört Duvar\" by Mert Ersoy was streamed around 70k on YouTube in first the week! And his second single “Bir İleri İki Geri” is also produced by me.",
+                "sh_p4_desc": "The song that I produced \"Dört Duvar\" by Mert Ersoy was streamed around 70k on YouTube in first the week! And his second single “Bir İleri İki Geri” that I composed, produced, performed, mixed & mastered by Mert Ersoy got 2 different editorial playlisted!!! \"New Music Friday Türkiye\" and \"Türkçe Rock\"!",
                 
                 "sh_p5_title": "AI & Data Projects",
                 "sh_p5_desc": "Completing AI training tasks like audio annotation and QA for xAI and annotating music with emotional, cultural and musical data for BeatpulseLabs",
@@ -1376,7 +1371,7 @@
                 "sh_p3_title": "\"Sagas of Lumin\" Oyunu İçin Müzikler",
                 "sh_p3_desc": "Ejderhalara binebildiğiniz bu oyun için iki orijinal parça besteleyerek bu büyülü dünyaya katkıda bulunduğumu söylemekten büyük heyecan duyuyorum! Future Games Show'da fragmanı bu kadar çok harika oyunla birlikte izlemek harika bir andı.",
                 
-                "sh_p4_desc": "Mert Ersoy'un prodüktörlüğünü yaptığım 'Dört Duvar' adlı şarkısı ilk haftasında YouTube'da yaklaşık 70 bin kez dinlendi! Ve ikinci teklisi 'Bir İleri İki Geri'nin prodüktörlüğünü de ben üstlendim.",
+                "sh_p4_desc": "Prodüktörlüğünü yaptığım Mert Ersoy'un \"Dört Duvar\" adlı şarkısı ilk haftasında YouTube'da yaklaşık 70 bin kez dinlendi! Mert Ersoy'un bestelediğim, prodüktörlüğünü yaptığım, çaldığım, miks ve mastering'ini üstlendiğim ikinci teklisi \"Bir İleri İki Geri\" ise \"New Music Friday Türkiye\" ve \"Türkçe Rock\" olmak üzere 2 farklı editoryal listeye girdi!!!",
                 
                 "sh_p5_title": "Yapay Zeka ve Veri Projeleri",
                 "sh_p5_desc": "xAI için ses etiketleme ve kalite kontrol (QA) gibi yapay zeka eğitim görevlerini tamamlamak ve BeatpulseLabs için müzikleri duygusal, kültürel ve müzikal verilerle etiketlemek.",
@@ -1428,7 +1423,7 @@
                 "nav_media": "-- Medios",
                 "nav_livesound": "-- Sonido en Vivo",
                 "nav_contributions": "-- Contribuciones",
-                "nav_instrumentalist": "- Fakala como Instrumentista",
+                "nav_instrumentalist": "- Fakala como Instrumentalist",
                 "nav_composer": "- Fakala como Compositor",
                 "nav_projects": "- Proyectos de Fakala ▾",
                 "nav_hikaye": "-- El Proyecto Hikaye",
@@ -1458,7 +1453,7 @@
                 "sh_p3_title": "Banda sonora del juego \"Sagas of Lumin\"",
                 "sh_p3_desc": "¡Estoy más que emocionado de decir que contribuí a este mundo mágico componiendo dos pistas originales para el juego en el que puedes montar dragones! Ver el tráiler en el Future Games Show junto a tantos grandes títulos fue un gran momento.",
                 
-                "sh_p4_desc": "¡La canción que produje 'Dört Duvar' de Mert Ersoy se reprodujo alrededor de 70k en YouTube en la primera semana! Y su segundo sencillo 'Bir İleri İki Geri' también es producido por mí.",
+                "sh_p4_desc": "¡La canción que produje \"Dört Duvar\" de Mert Ersoy se reprodujo alrededor de 70k en YouTube en la primera semana! Y su segundo sencillo \"Bir İleri İki Geri\", que compuse, produje, interpreté, mezclé y mastericé, entró en 2 listas editoriales diferentes!!! \"New Music Friday Türkiye\" y \"Türkçe Rock\"!",
                 
                 "sh_p5_title": "Proyectos de IA y Datos",
                 "sh_p5_desc": "Completar tareas de entrenamiento de IA como anotación de audio y control de calidad para xAI y anotar música con datos emocionales, culturales y musicales para BeatpulseLabs.",
@@ -1540,7 +1535,7 @@
                 "sh_p3_title": "Soundtrack für das Spiel \"Sagas of Lumin\"",
                 "sh_p3_desc": "Ich bin mehr als begeistert zu sagen, dass ich zu dieser magischen Welt beigetragen habe, indem ich zwei Originaltitel für das Spiel komponiert habe, in dem man Drachen reiten kann! Den Trailer in der Future Games Show neben so vielen großartigen Titeln zu sehen, war ein großartiger Moment.",
                 
-                "sh_p4_desc": "Der Song, den ich produziert habe, 'Dört Duvar' von Mert Ersoy, wurde in der ersten Woche rund 70.000 Mal auf YouTube gestreamt! Und auch seine zweite Single 'Bir İleri İki Geri' wurde von mir produziert.",
+                "sh_p4_desc": "Der von mir produzierte Song \"Dört Duvar\" von Mert Ersoy wurde in der ersten Woche rund 70.000 Mal auf YouTube gestreamt! Und seine zweite Single \"Bir İleri İki Geri\", die ich komponiert, produziert, eingespielt, gemischt und gemastert habe, schaffte es in zwei verschiedene redaktionelle Playlists!!! \"New Music Friday Türkiye\" und \"Türkçe Rock\"!",
                 
                 "sh_p5_title": "KI- & Datenprojekte",
                 "sh_p5_desc": "Abschluss von KI-Trainingsaufgaben wie Audio-Annotation und QA für xAI und Annotation von Musik mit emotionalen, kulturellen und musikalischen Daten für BeatpulseLabs.",
